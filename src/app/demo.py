@@ -134,12 +134,13 @@ FEATURE_AVERAGES = {"rm": 6.28, "lstat": 12.65, "crim": 3.61}
 # Funciones
 # =============================================================================
 @st.cache_resource
-def load_model():
+@st.cache_resource
+def load_model() -> object:
     """Carga el modelo entrenado desde disco."""
     return joblib.load(MODEL_PATH)
 
 
-def get_price_segment(prediction):
+def get_price_segment(prediction: float) -> tuple[str, str, str]:
     """Clasifica la predicción en un segmento de precio."""
     for threshold, name, style, label in PRICE_SEGMENTS:
         if prediction < threshold:
@@ -147,7 +148,7 @@ def get_price_segment(prediction):
     return "Premium", "error", "> $35k"
 
 
-def build_input_dataframe(features):
+def build_input_dataframe(features: dict) -> pd.DataFrame:
     """Construye el DataFrame de entrada para el modelo con tipos correctos."""
     return pd.DataFrame(
         [
@@ -192,7 +193,7 @@ except FileNotFoundError:
     st.stop()
 
 # Sidebar
-st.sidebar.title("ℹ️ Información")
+st.sidebar.title("Información")
 st.sidebar.markdown(
     """
     **Proyecto:** MLOps - Dataset Estático
