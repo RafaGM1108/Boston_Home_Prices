@@ -221,13 +221,15 @@ def slider_for(feature_name: str) -> float:
     """Renderiza un slider para una feature usando su configuración."""
     cfg = FEATURE_CONFIG[feature_name]
     unit = f" {cfg['unit']}" if cfg["unit"] else ""
-    return st.slider(
-        f"{cfg['label']}{unit}",
-        min_value=cfg["min"],
-        max_value=cfg["max"],
-        value=cfg["default"],
-        step=cfg["step"],
-        help=cfg["help"],
+    return float(
+        st.slider(
+            f"{cfg['label']}{unit}",
+            min_value=cfg["min"],
+            max_value=cfg["max"],
+            value=cfg["default"],
+            step=cfg["step"],
+            help=cfg["help"],
+        )
     )
 
 
@@ -398,9 +400,7 @@ if predict:
         )
 
     st.markdown("#### ¿Por qué este precio?")
-    st.caption(
-        "Comparación de los factores más influyentes frente al promedio del dataset."
-    )
+    st.caption("Comparación de los factores más influyentes frente al promedio del dataset.")
 
     for feat, avg in FEATURE_AVERAGES.items():
         val = features[feat]
@@ -408,12 +408,10 @@ if predict:
         diff = val - avg
         arrow = "🔼" if diff > 0 else "🔽" if diff < 0 else "▶️"
         direction = "por encima" if diff > 0 else "por debajo" if diff < 0 else "igual"
-        st.markdown(
-            f"{arrow} **{cfg['label']}:** {val:g} ({direction} del promedio de {avg:g})"
-        )
+        st.markdown(f"{arrow} **{cfg['label']}:** {val:g} ({direction} del promedio de {avg:g})")
 
     st.info(
         "Esta estimación se basa en el dataset histórico de Boston Housing "
         "usado en el curso. No representa precios de mercado actuales.",
-        icon="ℹ️",
+        icon="💡",
     )
